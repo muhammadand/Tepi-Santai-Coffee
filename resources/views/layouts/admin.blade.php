@@ -26,8 +26,7 @@
                 </button>
             </div>
             <nav class="flex flex-col gap-1 font-sans text-base text-blue-gray-700">
-                @auth
-                @if (Auth::user()->role === 'admin')
+               
                 <a href="{{ route('admin.dashboard') }}"
                     class="flex items-center gap-4 p-3 rounded-lg transition-colors 
             text-white hover:text-orange-500 
@@ -39,7 +38,8 @@
                     </svg>
                     Dashboard
                 </a>
-              
+               @auth
+                @if (Auth::user()->role === 'admin')
                     <a href="{{ route('products.index') }}"
                         class="flex items-center gap-4 p-3 rounded-lg transition-colors 
                         text-white hover:text-orange-500 

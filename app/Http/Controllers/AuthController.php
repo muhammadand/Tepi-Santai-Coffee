@@ -79,7 +79,7 @@ class AuthController extends Controller
                     return redirect()->intended('/');
 
                 case 'kasir':
-                    return redirect()->intended(route('orders.index'));
+                    return redirect()->intended('/dashboard');
 
 
                 default:
