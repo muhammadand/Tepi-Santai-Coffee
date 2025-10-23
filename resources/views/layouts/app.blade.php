@@ -71,30 +71,57 @@
           <a href="{{url('/')}}" class="text-gray-700 hover:text-amber-500 transition font-medium">Home</a>
           <a href="{{route('menu.index')}}" class="text-gray-700 hover:text-amber-500 transition font-medium">Shop</a>
           <a href="{{route('orders.user')}}" class="text-gray-700 hover:text-amber-500 transition font-medium">My Orders</a>
+            <a href="{{route('layanan.ongkir')}}" class="text-gray-700 hover:text-amber-500 transition font-medium">Ongkir service</a>
         </nav>
 
         <!-- Social & Actions -->
-        <div class="flex items-center space-x-4">
-          <div class="hidden md:flex space-x-3">
-            <i class="fab fa-facebook text-gray-400 hover:text-amber-500 cursor-pointer transition"></i>
-            <i class="fab fa-twitter text-gray-400 hover:text-amber-500 cursor-pointer transition"></i>
-            <i class="fab fa-instagram text-gray-400 hover:text-amber-500 cursor-pointer transition"></i>
-          </div>
-          @guest
-            <a href="{{ route('login') }}" class="text-gray-600 hover:text-amber-500 transition">
-              <i class="far fa-user"></i> Log in
-            </a>
-          @endguest
+    <div class="flex items-center space-x-4">
+  <!-- Sosial media -->
+  <div class="hidden md:flex space-x-3">
+    <i class="fab fa-facebook text-gray-400 hover:text-amber-500 cursor-pointer transition"></i>
+    <i class="fab fa-twitter text-gray-400 hover:text-amber-500 cursor-pointer transition"></i>
+    <i class="fab fa-instagram text-gray-400 hover:text-amber-500 cursor-pointer transition"></i>
+  </div>
 
-          @auth
-            <form action="{{ route('logout') }}" method="POST">
-              @csrf
-              <button type="submit" class="text-gray-600 hover:text-amber-500 transition bg-transparent border-none cursor-pointer">
-                <i class="fas fa-sign-out-alt"></i> Logout
-              </button>
-            </form>
-          @endauth
-        </div>
+  <!-- Jika belum login -->
+  @guest
+    <a href="{{ route('login') }}" class="text-gray-600 hover:text-amber-500 transition">
+      <i class="far fa-user"></i> Log in
+    </a>
+  @endguest
+
+  <!-- Jika sudah login -->
+  @auth
+    <div class="relative group">
+      <!-- Tombol dropdown -->
+      <button class="flex items-center space-x-2 text-gray-600 hover:text-amber-500 focus:outline-none">
+        <i class="far fa-user-circle text-xl"></i>
+        <span class="hidden md:inline">{{ Auth::user()->name }}</span>
+        <i class="fas fa-chevron-down text-xs"></i>
+      </button>
+
+      <!-- Menu dropdown -->
+      <div
+        class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 z-50"
+      >
+        <a href="{{ route('profil.edit') }}"
+           class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
+          <i class="fas fa-id-card mr-2 text-amber-500"></i> Profil Saya
+        </a>
+
+
+        <form action="{{ route('logout') }}" method="POST">
+          @csrf
+          <button type="submit"
+                  class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
+            <i class="fas fa-sign-out-alt mr-2 text-amber-500"></i> Logout
+          </button>
+        </form>
+      </div>
+    </div>
+  @endauth
+</div>
+
       </div>
     </div>
   </header>
@@ -121,7 +148,7 @@
             </div>
           </div>
           <p class="text-gray-400 text-sm">
-            Menyajikan kopi dan camilan berkualitas dengan suasana santai di tepi kota.
+            Layanan hanya dalam wilayah kuningan saja.
           </p>
         </div>
         

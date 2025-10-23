@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\TestimoniController;
+use App\Http\Controllers\UserController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -19,15 +20,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/laporan', [DashboardController::class, 'laporan'])->name('laporan.index');
     Route::get('/admin/laporan/export-excel', [DashboardController::class, 'exportExcel'])->name('laporan.export.excel');
     Route::get('/admin/laporan/export-pdf', [DashboardController::class, 'exportPdf'])->name('laporan.export.pdf');
-    
-
-
     Route::get('/pesanan-saya', [OrderController::class, 'myOrders'])->name('orders.user');
+    //profil
+    Route::get('/profil/edit', [UserController::class, 'edit'])->name('profil.edit');
+    Route::put('/profil/update', [UserController::class, 'update'])->name('profil.update');
 });
 
 Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 
 Route::resource('users', AuthController::class);
+
+
+
 // (Opsional) admin view
 Route::get('/admin/feedback', [FeedbackController::class, 'index'])->middleware('auth')->name('feedback.index');
 Route::get('/register/admin', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -110,3 +114,5 @@ Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni
 // Simpan testimoni ke database
 Route::post('/testimoni', [TestimoniController::class, 'store'])
 ->name('testimoni.store');
+
+Route::get('/layanan-ongkir', [MenuController::class, 'layananOngkir'])->name('layanan.ongkir');

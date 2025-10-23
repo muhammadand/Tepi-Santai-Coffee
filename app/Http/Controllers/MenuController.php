@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 class MenuController extends Controller
 {
     public function index(Request $request)
@@ -70,6 +72,67 @@ class MenuController extends Controller
     
         return view('landing', compact('products', 'categories'));
     }
+
+
+  public function layananOngkir(Request $request)
+{
+    // Baca file JSON wilayah dari storage
+    $path = storage_path('app/data/wilayah_kuningan.json');
+    if (!file_exists($path)) {
+        abort(404, 'File wilayah tidak ditemukan.');
+    }
+
+    $json = file_get_contents($path);
+    $wilayah = json_decode($json, true);
+
+    if (!$wilayah) {
+        abort(400, 'Data wilayah tidak valid.');
+    }
+
+    // Ubah struktur data JSON menjadi array datar (flat)
+    $data = [];
+    foreach ($wilayah as $kabupaten => $kecamatans) {
+        foreach ($kecamatans as $kecamatan => $desas) {
+            foreach ($desas as $desa) {
+                $data[] = [
+                    'kabupaten' => $kabupaten,
+                    'kecamatan' => $kecamatan,
+                    'desa' => $desa,
+                    'tarif_ongkir' => rand(10000, 15000),
+                ];
+            }
+        }
+    }
+
+    $collection = collect($data);
+
+    // Fitur pencarian
+    $search = $request->input('search');
+    if ($search) {
+        $collection = $collection->filter(function ($item) use ($search) {
+            return stripos($item['kabupaten'], $search) !== false ||
+                   stripos($item['kecamatan'], $search) !== false ||
+                   stripos($item['desa'], $search) !== false;
+        });
+    }
+
+    // Pagination manual (10 data per halaman)
+    $perPage = 10;
+    $currentPage = LengthAwarePaginator::resolveCurrentPage();
+    $pagedData = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+    $paginated = new LengthAwarePaginator(
+        $pagedData,
+        $collection->count(),
+        $perPage,
+        $currentPage,
+        ['path' => $request->url(), 'query' => $request->query()]
+    );
+
+    return view('menu.layanan_ongkir', ['dataOngkir' => $paginated]);
+}
+
+
     
     
 }

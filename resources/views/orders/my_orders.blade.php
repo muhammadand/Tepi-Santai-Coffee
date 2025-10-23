@@ -44,7 +44,7 @@
                     </div>
 
                     <!-- Detail Item -->
-                    <ul class="text-sm space-y-4 text-gray-700">
+                    <ul class="text-sm space-y-4 text-gray-700 mb-4">
                         @foreach ($order->items as $item)
                             <li
                                 class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-amber-200 pb-3">
@@ -64,7 +64,7 @@
                                     @if ($order->status_order === 'selesai')
                                         <a href="{{ route('testimoni.create', $item->id) }}"
                                             class="mt-4 inline-block bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-full text-sm shadow-md">
-                                            ✍️ Beri Testimoni untuk {{ $item->produk }}
+                                            ✍️ Beri Testimoni
                                         </a>
                                     @endif
                                 </div>
@@ -72,20 +72,33 @@
                         @endforeach
                     </ul>
 
-                    <!-- Tombol Bayar -->
+                    <!-- 🏠 Detail Alamat -->
+                    <div class="bg-amber-50 border border-amber-100 rounded-lg p-4 mt-3">
+                        <h4 class="text-sm font-semibold text-amber-700 mb-2 flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2 text-amber-500"></i> Alamat Pengiriman
+                        </h4>
+                        <div class="text-gray-700 text-sm leading-relaxed">
+                            <p><strong>Kabupaten:</strong> {{ $order->kabupaten ?? 'Kuningan' }}</p>
+                            <p><strong>Kecamatan:</strong> {{ $order->kecamatan ?? 'Belum diisi' }}</p>
+                            <p><strong>Desa:</strong> {{ $order->desa ?? 'Belum diisi' }}</p>
+                            <p><strong>Detail Alamat:</strong> {{ $order->detail_alamat ?? 'Belum diisi' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi -->
                     @if ($order->payment_status === 'pending')
                         <form action="{{ route('payment.proses', $order->id) }}" method="POST" class="mt-6 text-center">
                             @csrf
                             <button type="submit"
                                 class="bg-amber-600 hover:bg-amber-700 text-white text-sm px-6 py-2 rounded-full font-semibold shadow-md hover:shadow-lg inline-flex items-center transition-all duration-300">
-                                <i class="fas fa-mug-saucer mr-2"></i> Bayar Sekarang
+                                <i class="fas fa-wallet mr-2"></i> Bayar Sekarang
                             </button>
                         </form>
                     @endif
 
-                    <!-- ✅ Tombol "Tandai Diterima" hanya muncul jika status masih dipesan -->
                     @if ($order->status_order === 'dipesan')
-                        <form action="{{ route('orders.updateStatus.status', [$order->id, 'status' => 'selesai']) }}" method="POST" class="mt-6 text-center">
+                        <form action="{{ route('orders.updateStatus.status', [$order->id, 'status' => 'selesai']) }}"
+                            method="POST" class="mt-4 text-center">
                             @csrf
                             @method('PUT')
                             <button type="submit"
@@ -99,14 +112,15 @@
                 <div class="text-center mt-20 text-gray-400">
                     <i class="fas fa-box-open text-5xl text-amber-400 mb-4"></i>
                     <p class="text-lg font-semibold">Belum ada pesanan</p>
-                    <p class="text-sm text-gray-500">Saatnya manjakan dirimu dengan pesanan kopi & kue hari ini ☕🍰</p>
+                    <p class="text-sm text-gray-500">Saatnya manjakan dirimu dengan kopi & kue favoritmu ☕🍰</p>
                 </div>
             @endforelse
         </div>
     </section>
 
+    <!-- SweetAlert -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -119,7 +133,7 @@
                     iconColor: '#ffb300'
                 });
             @endif
-    
+
             @if (session('error'))
                 Swal.fire({
                     icon: 'error',

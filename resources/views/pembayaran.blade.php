@@ -22,18 +22,20 @@
     <!-- Info Pemesan -->
     <div class="mb-6 border-b border-amber-200 pb-4 space-y-1 text-sm text-gray-700">
         <p><span class="font-semibold text-amber-600">Nama Pemesan:</span> {{ $order->nama }}</p>
+        <p><span class="font-semibold text-amber-600">Kecamatan:</span> {{ $order->kecamatan }}</p>
+        <p><span class="font-semibold text-amber-600">Desa:</span> {{ $order->desa }}</p>
         <p><span class="font-semibold text-amber-600">Alamat:</span> {{ $order->detail_alamat }}</p>
         <p><span class="font-semibold text-amber-600">Metode Pembayaran:</span> {{ ucfirst($order->payment_method) }}</p>
         <p class="text-gray-400 text-xs">{{ $order->created_at->format('d M Y, H:i') }}</p>
     </div>
 
     <!-- List Produk -->
-    @php $total = 0; @endphp
+    @php $subtotalProduk = 0; @endphp
     <div class="space-y-4">
         @foreach ($order->items as $item)
             @php
                 $subtotal = $item->price * $item->quantity;
-                $total += $subtotal;
+                $subtotalProduk += $subtotal;
             @endphp
             <div class="border border-amber-200 rounded-lg p-4 shadow-sm bg-amber-50">
                 <div class="flex justify-between items-start mb-1 text-gray-800">
@@ -52,10 +54,24 @@
         @endforeach
     </div>
 
-    <!-- Total -->
-    <div class="mt-6 border-t border-amber-200 pt-4 text-right">
-        <p class="text-sm font-medium text-gray-700">Total Pembayaran:</p>
-        <p class="text-2xl font-bold text-amber-700">Rp {{ number_format($total, 0, ',', '.') }}</p>
+    <!-- Rincian Biaya -->
+    <div class="mt-6 border-t border-amber-200 pt-4 space-y-2">
+        <div class="flex justify-between text-sm text-gray-700">
+            <span class="font-medium">Subtotal Produk:</span>
+            <span>Rp {{ number_format($subtotalProduk, 0, ',', '.') }}</span>
+        </div>
+        <div class="flex justify-between text-sm text-gray-700">
+            <span class="font-medium">Ongkir:</span>
+            <span>Rp {{ number_format($order->ongkir ?? 0, 0, ',', '.') }}</span>
+        </div>
+        <div class="border-t border-amber-200 pt-2 mt-2">
+            <div class="flex justify-between items-center">
+                <span class="text-base font-semibold text-gray-800">Total Pembayaran:</span>
+                <span class="text-2xl font-bold text-amber-700">
+                    Rp {{ number_format($subtotalProduk + ($order->ongkir ?? 0), 0, ',', '.') }}
+                </span>
+            </div>
+        </div>
     </div>
 
     <!-- Tombol Bayar -->

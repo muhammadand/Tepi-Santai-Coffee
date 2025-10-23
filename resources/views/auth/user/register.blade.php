@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -44,7 +42,40 @@
                 @enderror
             </div>
 
-         
+            {{-- Dropdown Wilayah --}}
+            <div>
+                <label class="block text-sm text-amber-700 mb-1">Kabupaten</label>
+                <select id="kabupaten" name="kabupaten" required
+                    class="w-full px-4 py-2 bg-white/10 border border-amber-300 rounded-full text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <option value="">-- Pilih Kabupaten --</option>
+                </select>
+                @error('kabupaten')
+                    <p class="text-amber-300 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm text-amber-700 mb-1">Kecamatan</label>
+                <select id="kecamatan" name="kecamatan" required
+                    class="w-full px-4 py-2 bg-white/10 border border-amber-300 rounded-full text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <option value="">-- Pilih Kecamatan --</option>
+                </select>
+                @error('kecamatan')
+                    <p class="text-amber-300 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm text-amber-700 mb-1">Desa</label>
+                <select id="desa" name="desa" required
+                    class="w-full px-4 py-2 bg-white/10 border border-amber-300 rounded-full text-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <option value="">-- Pilih Desa --</option>
+                </select>
+                @error('desa')
+                    <p class="text-amber-300 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
             <input type="hidden" name="role" value="pelanggan">
 
             <div>
@@ -75,6 +106,53 @@
             <a href="{{ route('login') }}" class="text-amber-500 hover:text-amber-700 font-semibold">Masuk sekarang</a>
         </p>
     </div>
+
+    {{-- Script Wilayah --}}
+    <script>
+        const wilayah = @json($wilayah ?? []);
+
+        const kabSelect = document.getElementById('kabupaten');
+        const kecSelect = document.getElementById('kecamatan');
+        const desaSelect = document.getElementById('desa');
+
+        // isi kabupaten
+        Object.keys(wilayah).forEach(kab => {
+            const opt = document.createElement('option');
+            opt.value = kab;
+            opt.textContent = kab;
+            kabSelect.appendChild(opt);
+        });
+
+        kabSelect.addEventListener('change', function() {
+            kecSelect.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
+            desaSelect.innerHTML = '<option value="">-- Pilih Desa --</option>';
+
+            const selectedKab = this.value;
+            if (wilayah[selectedKab]) {
+                Object.keys(wilayah[selectedKab]).forEach(kec => {
+                    const opt = document.createElement('option');
+                    opt.value = kec;
+                    opt.textContent = kec;
+                    kecSelect.appendChild(opt);
+                });
+            }
+        });
+
+        kecSelect.addEventListener('change', function() {
+            desaSelect.innerHTML = '<option value="">-- Pilih Desa --</option>';
+            const selectedKab = kabSelect.value;
+            const selectedKec = this.value;
+
+            if (wilayah[selectedKab] && wilayah[selectedKab][selectedKec]) {
+                wilayah[selectedKab][selectedKec].forEach(desa => {
+                    const opt = document.createElement('option');
+                    opt.value = desa;
+                    opt.textContent = desa;
+                    desaSelect.appendChild(opt);
+                });
+            }
+        });
+    </script>
 
 </body>
 

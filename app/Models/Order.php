@@ -9,11 +9,16 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'nama',
+        'kabupaten',
+        'kecamatan',      // baru
+        'desa',           // baru
         'detail_alamat',
+        'ongkir',         // baru
+        'total',          // baru
         'midtrans_order_id',
         'payment_status',
-        'status_order',       // kolom baru
-        'payment_method'      // kolom baru: tunai atau non-tunai
+        'status_order',
+        'payment_method'
     ];
 
     public function items()

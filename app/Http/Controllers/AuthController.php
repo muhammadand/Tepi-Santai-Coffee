@@ -30,8 +30,22 @@ class AuthController extends Controller
     }
     public function registeruser()
     {
-        return view('auth.user.register');
+        // Baca file JSON dari storage
+        $path = storage_path('app/data/wilayah_kuningan.json');
+
+        if (file_exists($path)) {
+            $jsonData = file_get_contents($path);
+            $wilayah = json_decode($jsonData, true);
+        } else {
+            $wilayah = [];
+        }
+
+        // Kirim data ke view
+        return view('auth.user.register', [
+            'wilayah' => $wilayah
+        ]);
     }
+
 
     // Proses register
     public function register(Request $request)
@@ -40,18 +54,25 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'role' => 'required|string',
-            'password' => 'required|string|min:6|confirmed', // pakai confirmed
+            'password' => 'required|string|min:6|confirmed',
+            'kabupaten' => 'nullable|string|max:100',
+            'kecamatan' => 'nullable|string|max:100',
+            'desa' => 'nullable|string|max:100',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
+            'kabupaten' => $request->kabupaten,
+            'kecamatan' => $request->kecamatan,
+            'desa' => $request->desa,
             'password' => Hash::make($request->password),
         ]);
 
         return redirect()->route('login')->with('success', 'Register berhasil, silakan login.');
     }
+
 
     // Tampilkan form login
     public function showLoginForm()

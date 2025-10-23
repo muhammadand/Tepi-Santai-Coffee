@@ -10,24 +10,32 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     // Menampilkan isi keranjang
-   
 public function index()
 {
-    // ✅ Cek apakah user sudah login
+    // ✅ Pastikan user sudah login
     if (!Auth::check()) {
-        // Kalau belum login, arahkan ke halaman login
         return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu untuk mengakses keranjang.');
     }
 
+    $user = Auth::user(); // ambil data user yang sedang login
     $cart = session()->get('cart', []);
 
-    // ✅ Ambil order terakhir dari user yang sedang login
-    $lastOrder = Order::where('user_id', Auth::id())
+    // ✅ Ambil order terakhir user
+    $lastOrder = Order::where('user_id', $user->id)
         ->latest()
         ->first();
 
+    // ✅ Ambil data kabupaten/kecamatan/desa dari JSON
+    $kabupatenDataPath = storage_path('app/data/wilayah_kuningan.json');
+    $kabupatenData = file_exists($kabupatenDataPath)
+        ? json_decode(file_get_contents($kabupatenDataPath), true)
+        : [];
+
+    // ✅ Kirim semua data ke view
     return view('cart.index', [
         'cart' => $cart,
+        'user' => $user,
+        'kabupatenData' => $kabupatenData,
         'lastAlamat' => $lastOrder?->detail_alamat,
     ]);
 }

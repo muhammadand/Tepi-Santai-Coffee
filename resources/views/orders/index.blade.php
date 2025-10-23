@@ -18,8 +18,8 @@
 
             {{-- Pesanan Diterima --}}
             <div>
-                <h2 class="text-lg font-semibold mb-4 text-green-700">✅ Pesanan Diterima</h2>
-                @forelse ($orders->where('status_order', 'diterima') as $order)
+                <h2 class="text-lg font-semibold mb-4 text-green-700">✅ Pesanan Dikirim</h2>
+                @forelse ($orders->where('status_order', 'dikirim') as $order)
                     @include('components.order-card', ['order' => $order])
                 @empty
                     <p class="text-sm text-gray-500">Belum ada pesanan yang diterima.</p>

@@ -5,23 +5,25 @@
         @method('PUT')
 
         <div class="flex items-center justify-between mb-3">
-            <span class="font-semibold text-gray-700">Order #{{ $order->id }} - {{ $order->nama }}</span>
+            <span class="font-semibold text-gray-700">
+                Order #{{ $order->id }} - {{ $order->nama }}
+            </span>
 
-            {{-- ✅ Jika status masih "dipesan", tampilkan tombol tandai diterima --}}
+            {{-- ✅ Jika status masih "dipesan", tampilkan tombol "Tandai Dikirim" --}}
             @if ($order->status_order === 'dipesan')
-                <input type="hidden" name="status_order" value="diterima">
+                <input type="hidden" name="status_order" value="dikirim">
                 <button type="submit"
                     class="px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 transition font-medium text-sm">
-                    Tandai Diterima
+                    🚚 Tandai Dikirim
                 </button>
 
-            {{-- ✅ Jika status sudah diterima, tampilkan tombol Cetak Struk --}}
-            @elseif ($order->status_order === 'diterima')
+            {{-- ✅ Jika status sudah dikirim --}}
+            @elseif ($order->status_order === 'dikirim')
                 <div class="flex items-center gap-2">
                     <button disabled
                         class="px-4 py-2 bg-gray-400 text-white rounded-lg text-sm cursor-not-allowed"
-                        title="Sudah diterima">
-                        ✅ Sudah Diterima
+                        title="Sudah dikirim">
+                        ✅ Sudah Dikirim
                     </button>
 
                     {{-- Tombol Cetak Struk --}}
@@ -35,14 +37,18 @@
         </div>
 
         {{-- Detail order --}}
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1">
                 <p><span class="font-semibold text-gray-600">Nama:</span> {{ $order->nama }}</p>
-                <p><span class="font-semibold text-gray-600">Alamat:</span> #{{ $order->detail_alamat }}</p>
+                <p><span class="font-semibold text-gray-600">Kabupaten:</span> {{ $order->kabupaten ?? '-' }}</p>
+                <p><span class="font-semibold text-gray-600">Kecamatan:</span> {{ $order->kecamatan ?? '-' }}</p>
+                <p><span class="font-semibold text-gray-600">Desa:</span> {{ $order->desa ?? '-' }}</p>
+                <p><span class="font-semibold text-gray-600">Detail Alamat:</span> {{ $order->detail_alamat ?? '-' }}</p>
+            </div>
+
+            <div class="space-y-1">
                 <p><span class="font-semibold text-gray-600">Metode:</span> {{ ucfirst($order->payment_method) }}</p>
                 <p><span class="font-semibold text-gray-600">Midtrans ID:</span> {{ $order->midtrans_order_id ?? '-' }}</p>
-            </div>
-            <div class="space-y-1">
                 <p><span class="font-semibold text-gray-600">Status Bayar:</span> {{ ucfirst($order->payment_status) }}</p>
             </div>
         </div>
