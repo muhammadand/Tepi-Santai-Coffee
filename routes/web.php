@@ -115,4 +115,4 @@ Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni
 Route::post('/testimoni', [TestimoniController::class, 'store'])
 ->name('testimoni.store');
 
-Route::get('/layanan-ongkir', [MenuController::class, 'layananOngkir'])->name('layanan.ongkir');
+Route::get('/layanan/ongkir', [MenuController::class, 'layananOngkir'])->name('layanan.ongkir');
