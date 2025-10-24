@@ -71,7 +71,10 @@
                             </li>
                         @endforeach
                     </ul>
-
+                    <!-- Total Pesanan -->
+                    <div class="flex justify-end mt-2 text-lg font-semibold text-gray-900">
+                        <span>Total: Rp {{ number_format($order->total, 0, ',', '.') }}</span>
+                    </div>
                     <!-- 🏠 Detail Alamat -->
                     <div class="bg-amber-50 border border-amber-100 rounded-lg p-4 mt-3">
                         <h4 class="text-sm font-semibold text-amber-700 mb-2 flex items-center">
@@ -96,7 +99,7 @@
                         </form>
                     @endif
 
-                    @if ($order->status_order === 'dipesan')
+                    @if ($order->status_order === 'dikirim')
                         <form action="{{ route('orders.updateStatus.status', [$order->id, 'status' => 'selesai']) }}"
                             method="POST" class="mt-4 text-center">
                             @csrf

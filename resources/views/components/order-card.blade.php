@@ -44,6 +44,7 @@
                 <p><span class="font-semibold text-gray-600">Kecamatan:</span> {{ $order->kecamatan ?? '-' }}</p>
                 <p><span class="font-semibold text-gray-600">Desa:</span> {{ $order->desa ?? '-' }}</p>
                 <p><span class="font-semibold text-gray-600">Detail Alamat:</span> {{ $order->detail_alamat ?? '-' }}</p>
+                  <p><span class="font-semibold text-gray-600">Status order:</span> {{ $order->status_order ?? '-' }}</p>
             </div>
 
             <div class="space-y-1">
